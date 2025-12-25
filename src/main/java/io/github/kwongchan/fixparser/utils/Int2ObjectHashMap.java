@@ -13,7 +13,6 @@ public class Int2ObjectHashMap<V> {
         int cap = powerOfTwo(initialCapacity);
         keys = new int[cap];
         values = new Object[cap];
-        // keys are initialized to 0 by JVM, which is EMPTY_KEY
         threshold = (int) (cap * LOAD_FACTOR);
     }
 

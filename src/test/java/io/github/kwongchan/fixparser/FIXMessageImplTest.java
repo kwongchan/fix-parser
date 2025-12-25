@@ -41,12 +41,12 @@ class FIXMessageImplTest {
     }
 
     @Test
-    void when_getString_then_returnValue() {
+    void when_getCharSequence_then_returnValue() {
         byte[] bytes = "55=SYM\u0001".getBytes();
         messageUnderTest.init(bytes);
         messageUnderTest.addFields(55, 3, 6);
         assertThat(messageUnderTest.hasTag(55)).isTrue();
-        assertThat(messageUnderTest.getString(55)).hasToString("SYM");
+        assertThat(messageUnderTest.getCharSequence(55)).hasToString("SYM");
     }
 
     @Test
@@ -130,7 +130,7 @@ class FIXMessageImplTest {
         assertThat(messageUnderTest.hasTag(38)).isFalse();
         // released should contain two items
         assertThat(releasedCharSequences).hasSize(2);
-        // getString should return null for missing tag
-        assertThat(messageUnderTest.getString(55)).isNull();
+        // getCharSequence should return null for missing tag
+        assertThat(messageUnderTest.getCharSequence(55)).isNull();
     }
 }

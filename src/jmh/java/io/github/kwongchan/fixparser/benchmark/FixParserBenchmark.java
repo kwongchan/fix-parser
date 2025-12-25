@@ -1,5 +1,7 @@
-package io.github.kwongchan.fixparser;
+package io.github.kwongchan.fixparser.benchmark;
 
+import io.github.kwongchan.fixparser.FIXParser;
+import io.github.kwongchan.fixparser.FIXParserFactory;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -22,7 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode({Mode.Throughput})
+@BenchmarkMode({Mode.AverageTime})
 @OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 5, timeUnit = TimeUnit.SECONDS)
@@ -38,7 +40,7 @@ public class FixParserBenchmark {
 
     @Setup(Level.Trial)
     public void setup() {
-        // Generate 1 million identical sample FIX messages (vary if needed)
+        // Generate 1 million sample FIX messages
         fixMessages = new byte[MESSAGES_COUNT][];
         var fixStringTemplate = "8=FIX.4.4\u00019=129\u000135=8\u000134=2\u000149=SELLER\u000156=BUYER\u000111=ORDERID\u000117=EXECID\u000120=0\u0001150=2\u000139=2\u000155=SYM\u000154=1\u000138=100\u000140=2\u000144=99.99\u000159=1\u000160=20230101-00:00:00.123\u000110=012\u0001";
 

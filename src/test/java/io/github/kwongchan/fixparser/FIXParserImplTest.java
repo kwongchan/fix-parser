@@ -35,7 +35,7 @@ class FIXParserImplTest {
     }
 
     private void assertFIXMessage(FIXMessage message, String fixVersion, double price, int quantity) {
-        assertThat(message.getString(8)).hasToString(fixVersion);
+        assertThat(message.getCharSequence(8)).hasToString(fixVersion);
         assertThat(message.getDouble(44)).isEqualTo(price);
         assertThat(message.getInt(38)).isEqualTo(quantity);
     }

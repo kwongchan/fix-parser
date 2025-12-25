@@ -3,7 +3,7 @@ package io.github.kwongchan.fixparser;
 public interface FIXMessage {
     boolean hasTag(int tag);
 
-    CharSequence getString(int tag);
+    CharSequence getCharSequence(int tag);
 
     int getInt(int tag);
 

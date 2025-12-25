@@ -19,7 +19,7 @@ class FIXMessageImpl implements FIXMessage {
 
     FIXMessageImpl(FIXValueParser valueParser, ObjectPool<ByteArrayCharSequence> charSequencePool, int initialCapacity) {
         fields = new Int2ObjectHashMap<>(initialCapacity);
-        acquiredCharSequences = new ArrayList<>();
+        acquiredCharSequences = new ArrayList<>(initialCapacity);
         this.valueParser = valueParser;
         this.charSequencePool = charSequencePool;
     }
@@ -41,7 +41,7 @@ class FIXMessageImpl implements FIXMessage {
     }
 
     @Override
-    public CharSequence getString(int tag) {
+    public CharSequence getCharSequence(int tag) {
         return fields.get(tag);
     }
 
