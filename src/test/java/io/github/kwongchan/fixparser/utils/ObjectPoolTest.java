@@ -16,7 +16,7 @@ class ObjectPoolTest {
     }
 
     @Test
-    void when_emptyPool_when_acquire_then_retrieveFromFactory() {
+    void given_emptyPool_when_acquire_then_retrieveFromFactory() {
         var nextId = new AtomicInteger(0);
         Supplier<TestPoolable> factory = () -> new TestPoolable(nextId.incrementAndGet());
 
@@ -38,7 +38,7 @@ class ObjectPoolTest {
     }
 
     @Test
-    void testReleaseResetsObjectsAndExpandsPoolAndNullReleaseIsNoop() {
+    void given_fullPool_when_release_then_resetsObjectsAndExpandsPool() {
         AtomicInteger nextId = new AtomicInteger(0);
         Supplier<TestPoolable> factory = () -> new TestPoolable(nextId.incrementAndGet());
 
