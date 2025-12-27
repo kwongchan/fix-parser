@@ -8,16 +8,16 @@ public class ObjectPool<T extends Poolable> {
     private int size;
 
     public ObjectPool(Supplier<T> factory, int initialCapacity) {
-        if (initialCapacity < 0) {
-            throw new IllegalArgumentException("initialCapacity must be >= 0");
+        if (initialCapacity <= 0) {
+            throw new IllegalArgumentException("initialCapacity must be > 0");
         }
         this.factory = factory;
         this.pool = new Object[initialCapacity];
         this.size = 0;
 
         for (int i = 0; i < initialCapacity; i++) {
-             pool[i] = factory.get();
-             size++;
+            pool[i] = factory.get();
+            size++;
         }
     }
 

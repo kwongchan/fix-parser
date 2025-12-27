@@ -1,51 +1,53 @@
 package io.github.kwongchan.fixparser;
 
+import java.util.function.Supplier;
+
 class FIXParserImpl implements FIXParser {
 
-    private final FIXMessageImpl reusableMessage;
+    private final Supplier<FIXMessageImpl> messageFactory;
 
-    FIXParserImpl(FIXMessageImpl reusableMessage) {
-        this.reusableMessage = reusableMessage;
+    FIXParserImpl(Supplier<FIXMessageImpl> messageFactory) {
+        this.messageFactory = messageFactory;
     }
 
     @Override
     public FIXMessage parse(byte[] data, int start, int end) {
-        reusableMessage.reset();
-        reusableMessage.init(data);
+        var message = messageFactory.get();
+        message.init(data);
 
-        int i = start;
-        while (i < end) {
-            int tagStart = i;
-            while (i < end && data[i] != '=') i++;
-            if (i >= end) {
+        int index = start;
+        while (index < end) {
+            int tagStart = index;
+            while (index < end && data[index] != '=') index++;
+            if (index >= end) {
                 throw new IllegalArgumentException("Missing '=' after tag");
             }
-            int tag = parseTag(data, tagStart, i);
+            int tag = parseTag(data, tagStart, index);
 
-            i++; // skip '='
-            int valueStart = i;
+            index++; // skip '='
+            int valueStart = index;
             // find SOH (0x01)
-            while (i < end && data[i] != 0x01) {
-                i++;
+            while (index < end && data[index] != 0x01) {
+                index++;
             }
-            if (i >= end) {
+            if (index >= end) {
                 throw new IllegalArgumentException("Missing SOH after value");
             }
 
-            reusableMessage.addFields(tag, valueStart, i);
+            message.addFields(tag, valueStart, index);
 
             if (tag == 10) {
                 // checksum is the last field
                 break;
             }
 
-            i++; // skip SOH
+            index++; // skip SOH
         }
 
-        return reusableMessage;
+        return message;
     }
 
-    private static int parseTag(byte[] data, int start, int end) {
+    private int parseTag(byte[] data, int start, int end) {
         if (start >= end) {
             throw new NumberFormatException("Empty integer");
         }
@@ -60,6 +62,7 @@ class FIXParserImpl implements FIXParser {
             result = result * 10 + d;
             i++;
         }
+
         return result;
     }
 }

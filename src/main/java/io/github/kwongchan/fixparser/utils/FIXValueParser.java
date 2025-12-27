@@ -83,33 +83,33 @@ public class FIXValueParser {
         long significand = 0;
         int exponent = 0;
         boolean negative = false;
-        int i = 0;
+        int index = 0;
 
         // Sign
-        if (value.charAt(i) == '-') {
+        if (value.charAt(index) == '-') {
             negative = true;
-            i++;
-        } else if (value.charAt(i) == '+') i++;
+            index++;
+        } else if (value.charAt(index) == '+') index++;
 
         // Integer part
-        while (i < value.length()) {
-            char c = value.charAt(i);
+        while (index < value.length()) {
+            char c = value.charAt(index);
             if (c == '.') {
-                i++;
+                index++;
                 break;
             }
             if (c < '0' || c > '9') throw new NumberFormatException();
             significand = significand * 10 + (c - '0');
-            i++;
+            index++;
         }
 
         // Fractional part
-        while (i < value.length()) {
-            char c = value.charAt(i);
+        while (index < value.length()) {
+            char c = value.charAt(index);
             if (c < '0' || c > '9') throw new NumberFormatException();
             significand = significand * 10 + (c - '0');
             exponent--;
-            i++;
+            index++;
         }
 
         double d = significand * Math.pow(10, exponent);
@@ -187,21 +187,21 @@ public class FIXValueParser {
     }
 
     private static int getMillis(CharSequence value, int len) {
-        int idx = 17;
+        int index = 17;
         int millis = 0; // 3 digits
-        if (idx < len && value.charAt(idx) == '.') {
-            idx++;
+        if (index < len && value.charAt(index) == '.') {
+            index++;
             int digits = 0;
-            while (idx < len) {
-                char c = value.charAt(idx);
+            while (index < len) {
+                char c = value.charAt(index);
                 if (c < '0' || c > '9') {
-                    throw new NumberFormatException("Invalid fractional digit '" + c + "' at position " + idx);
+                    throw new NumberFormatException("Invalid fractional digit '" + c + "' at position " + index);
                 }
                 if (digits < 3) {
                     millis = millis * 10 + (c - '0');
                 }
                 digits++;
-                idx++;
+                index++;
             }
             if (digits != 3) {
                 throw new NumberFormatException("Only 3 fractional digits (milliseconds) supported");

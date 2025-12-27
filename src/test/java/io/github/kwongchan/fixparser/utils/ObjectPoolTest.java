@@ -1,6 +1,8 @@
 package io.github.kwongchan.fixparser.utils;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -10,9 +12,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ObjectPoolTest {
 
-    @Test
-    void given_negativeCapacity_when_newObjectPool_thenThrowException() {
-        assertThatThrownBy(() -> new ObjectPool<>(newFactory(), -1)).isInstanceOf(IllegalArgumentException.class);
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1})
+    void given_nonPositiveCapacity_when_newObjectPool_thenThrowException(int initialCapacity) {
+        assertThatThrownBy(() -> new ObjectPool<>(newFactory(), initialCapacity)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -75,13 +78,22 @@ class ObjectPoolTest {
         final int id;
         int resetCount = 0;
 
-        TestPoolable(int id) { this.id = id; }
+        TestPoolable(int id) {
+            this.id = id;
+        }
 
         @Override
-        public void reset() { resetCount++; }
+        public void reset() {
+            resetCount++;
+        }
 
-        int getResetCount() { return resetCount; }
-        int getId() { return id; }
+        int getResetCount() {
+            return resetCount;
+        }
+
+        int getId() {
+            return id;
+        }
     }
 
     private static Supplier<TestPoolable> newFactory() {

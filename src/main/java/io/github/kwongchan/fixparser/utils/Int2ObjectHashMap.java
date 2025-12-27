@@ -1,6 +1,9 @@
 package io.github.kwongchan.fixparser.utils;
 
+import java.util.Arrays;
+
 public class Int2ObjectHashMap<V> {
+
     private static final float LOAD_FACTOR = 0.75f;
     private static final int EMPTY_KEY = 0;
 
@@ -27,7 +30,7 @@ public class Int2ObjectHashMap<V> {
     }
 
     private static int hash(int key) {
-        // Murmur-like finalizer for better distribution
+        // Murmur hash for better distribution
         int h = key;
         h ^= h >>> 16;
         h *= 0x85ebca6b;
@@ -42,7 +45,7 @@ public class Int2ObjectHashMap<V> {
     }
 
     public V put(int key, V value) {
-        if (size  >= threshold) {
+        if (size >= threshold) {
             rehash(keys.length * 2);
         }
 
@@ -118,8 +121,8 @@ public class Int2ObjectHashMap<V> {
 
     public void clear() {
         if (size > 0) {
-            java.util.Arrays.fill(keys, EMPTY_KEY);
-            java.util.Arrays.fill(values, null);
+            Arrays.fill(keys, EMPTY_KEY);
+            Arrays.fill(values, null);
             size = 0;
         }
     }

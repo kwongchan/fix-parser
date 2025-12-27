@@ -6,13 +6,6 @@ public class ByteArrayCharSequence implements Poolable, CharSequence {
     private int start;
     private int end;
 
-    @Override
-    public void reset() {
-        bytes = null;
-        start = 0;
-        end = 0;
-    }
-
     public void init(byte[] byteArray, int start, int end) {
         this.bytes = byteArray;
         this.start = start;
@@ -47,5 +40,12 @@ public class ByteArrayCharSequence implements Poolable, CharSequence {
         var bytes = new byte[length()];
         System.arraycopy(this.bytes, start, bytes, 0, end - start);
         return new String(bytes);
+    }
+
+    @Override
+    public void reset() {
+        bytes = null;
+        start = 0;
+        end = 0;
     }
 }

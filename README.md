@@ -22,19 +22,19 @@ int checksum = msg.getInt(10);
 ```
 
 ## Limitations
-- No message validation: does not verify checksum, 9= BodyLength, required header/trailer fields, or correct field ordering.
+- No message validation: does not verify checksum, bodyLength, required header/trailer fields, or correct field ordering.
 - No repeating-group support: repeating groups (and nested groups) are not parsed.
 - Limited field types: only basic parsing (string/int/long/double/boolean/date-time); special/complex types (RawData/binary, encoded fields) are not handled.
 - No semantic validation: tag semantics, enum/field value validation, or FIX version-specific rules are not enforced.
-- Not designed for concurrent mutation: internal data structures/iterators are not thread-safe for concurrent use.
+- Not designed for concurrent mutation: internal data structures are not thread-safe for concurrent use.
 
 ## Benchmark
 Below is the JMH Benchmark results for parsing one million FIX messages. It also includes the benchmark results of QuickFix/J and a simple `String.split()` implementation for comparison.
 ```
 Benchmark                                                  Mode  Cnt  Score   Error  Units
-FixParserBenchmark.parseOneMillionMessagesWithFIXParser    avgt   10  0.586 ± 0.005   s/op
-FixParserBenchmark.parseOneMillionMessagesWithQuickFixJ    avgt   10  7.266 ± 0.138   s/op
-FixParserBenchmark.parseOneMillionMessagesWithStringSplit  avgt   10  1.374 ± 0.103   s/op
+FixParserBenchmark.parseOneMillionMessagesWithFIXParser    avgt   10  0.593 ± 0.013   s/op
+FixParserBenchmark.parseOneMillionMessagesWithQuickFixJ    avgt   10  2.342 ± 0.356   s/op
+FixParserBenchmark.parseOneMillionMessagesWithStringSplit  avgt   10  1.430 ± 0.147   s/op
 ```
 The benchmark results show that the Simple FIX Parser significantly outperforms QuickFix/J and the `String.split()` implementation in terms of average time when parsing one million FIX messages.
 

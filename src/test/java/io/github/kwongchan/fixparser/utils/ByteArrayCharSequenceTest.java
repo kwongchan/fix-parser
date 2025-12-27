@@ -45,10 +45,10 @@ class ByteArrayCharSequenceTest {
         byte[] data = "substring".getBytes(StandardCharsets.US_ASCII);
         sequenceUnderTest.init(data, 0, data.length);
 
-        CharSequence sub = sequenceUnderTest.subSequence(3, 6); // expected "str" (indexes [3,6))
-        assertThat(sub.length()).isEqualTo(3);
-        assertThat(sub.charAt(0)).isEqualTo('s');
-        assertThat(sub).hasToString("str");
+        var subSequence = sequenceUnderTest.subSequence(3, 6);
+        assertThat(subSequence.length()).isEqualTo(3);
+        assertThat(subSequence.charAt(0)).isEqualTo('s');
+        assertThat(subSequence).hasToString("str");
     }
 
     @Test
@@ -56,10 +56,10 @@ class ByteArrayCharSequenceTest {
         byte[] data = "substring".getBytes(StandardCharsets.US_ASCII);
         sequenceUnderTest.init(data, 0, data.length);
 
-        CharSequence empty = sequenceUnderTest.subSequence(2, 2);
-        assertThat(empty.length()).isZero();
-        assertThat(empty).hasToString("");
-        assertThatThrownBy(() -> empty.charAt(0)).isInstanceOf(IndexOutOfBoundsException.class);
+        var subSequence = sequenceUnderTest.subSequence(2, 2);
+        assertThat(subSequence.length()).isZero();
+        assertThat(subSequence).hasToString("");
+        assertThatThrownBy(() -> subSequence.charAt(0)).isInstanceOf(IndexOutOfBoundsException.class);
     }
 
     @Test

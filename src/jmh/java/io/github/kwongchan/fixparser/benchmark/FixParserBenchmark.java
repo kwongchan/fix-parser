@@ -17,6 +17,7 @@ import org.openjdk.jmh.infra.Blackhole;
 import quickfix.DefaultMessageFactory;
 import quickfix.FieldNotFound;
 import quickfix.InvalidMessage;
+import quickfix.MessageUtils;
 import quickfix.field.ApplVerID;
 
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,7 @@ public class FixParserBenchmark {
 
     private byte[][] fixMessages;
     private DateTimeFormatter dateTimeFormatter;
+    private DefaultMessageFactory quickFixMessageFactory;
     private FIXParser fixParser;
 
     @Setup(Level.Trial)
@@ -52,6 +54,7 @@ public class FixParserBenchmark {
         System.out.println("Setup complete: " + MESSAGES_COUNT + " messages prepared.");
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss[.SSS]");
 
+        quickFixMessageFactory = new DefaultMessageFactory(ApplVerID.FIX44);
         fixParser = new FIXParserFactory().newParser();
     }
 
@@ -99,8 +102,7 @@ public class FixParserBenchmark {
     @Benchmark
     public void parseOneMillionMessagesWithQuickFixJ(Blackhole blackhole) throws FieldNotFound, InvalidMessage {
         for (int i = 0; i < MESSAGES_COUNT; i++) {
-            var messageFactory = new DefaultMessageFactory(ApplVerID.FIX44);
-            var message = quickfix.MessageUtils.parse(messageFactory, null, new String(fixMessages[i]));
+            var message = MessageUtils.parse(quickFixMessageFactory, null, new String(fixMessages[i]));
             var orderQty = message.getInt(38);
             var orderPrice = message.getDouble(44);
             var transactTime = message.getUtcTimeStamp(60);
