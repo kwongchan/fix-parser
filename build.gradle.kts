@@ -10,6 +10,18 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
+    options.encoding = "UTF-8"
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
